@@ -159,7 +159,7 @@ class AuthService {
 
     const tokens = this.generateTokens(payload);
 
-    user.refreshToken = tokens.refreshToken;
+    user.refreshToken = hashToken(tokens.refreshToken);
     await userRepository.save(user);
 
     const { password: _, refreshToken: __, ...safeUser } = user as User & {
@@ -178,7 +178,7 @@ class AuthService {
     }
 
     const user = await userRepository.findByIdWithRefreshToken(payload.userId);
-    if (!user || user.refreshToken !== token) {
+    if (!user || user.refreshToken !== hashToken(token)) {
       throw new AppError("Refresh token revoked", 401);
     }
 
@@ -189,7 +189,7 @@ class AuthService {
     };
 
     const tokens = this.generateTokens(newPayload);
-    user.refreshToken = tokens.refreshToken;
+    user.refreshToken = hashToken(tokens.refreshToken);
     await userRepository.save(user);
 
     return tokens;
