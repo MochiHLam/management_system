@@ -74,7 +74,15 @@ class AuthService {
     });
 
     await userRepository.save(user);
-    await sendOtpEmail(user.email, otp);
+
+    // The account is already committed at this point, so a mail delivery
+    // failure shouldn't turn into a 500 that makes the client think
+    // registration failed — the user can still get a code via resend-otp.
+    try {
+      await sendOtpEmail(user.email, otp);
+    } catch (error) {
+      console.error(`Failed to send OTP email to ${user.email}:`, error);
+    }
 
     const { password: _, otpCode: __, ...result } = user as User & {
       password: string;
