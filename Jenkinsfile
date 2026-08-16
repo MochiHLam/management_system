@@ -33,13 +33,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 withCredentials([
-                    string(
-                        credentialsId: "backend-env",
-                        variable: "BACKEND_ENV"
+                    file(
+                        credentialsId: "backend-env-file",
+                        variable: "BACKEND_ENV_FILE"
                     )
                 ]){
                     sh '''
-                    echo "$BACKEND_ENV" > backend/.env
+                    cp "$BACKEND_ENV_FILE" backend/.env
                     docker compose up -d
                     '''
                 }
