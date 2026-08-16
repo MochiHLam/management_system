@@ -33,7 +33,7 @@ export default function AuthPage() {
     try {
       if (mode === "login") {
         await login(form.email, form.password);
-        push("success", "Signed in successfully");
+        push("success", "Signed in successfully!");
         navigate("/");
       } else {
         const user = await register({
@@ -95,9 +95,8 @@ export default function AuthPage() {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`relative z-10 rounded-lg py-2 transition-colors ${
-                mode === m ? "text-petrol" : "text-ink-soft"
-              }`}
+              className={`relative z-10 rounded-lg py-2 transition-colors ${mode === m ? "text-petrol" : "text-ink-soft"
+                }`}
             >
               {mode === m && (
                 <motion.span
