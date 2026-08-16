@@ -32,9 +32,17 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''
-                docker compose up -d
-                '''
+                withCredentials([
+                    string(
+                        credentialsId: "backend-env",
+                        variable: "BACKEND_ENV"
+                    )
+                ]){
+                    sh '''
+                    echo "$BACKEND_ENV" > backend/.env
+                    docker compose up -d
+                    '''
+                }
             }
         }
     }
