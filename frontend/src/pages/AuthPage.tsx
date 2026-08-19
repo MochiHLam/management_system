@@ -33,7 +33,7 @@ export default function AuthPage() {
     try {
       if (mode === "login") {
         await login(form.email, form.password);
-        push("success", "Signed in successfully!");
+        push("success", "Signed in successfully");
         navigate("/");
       } else {
         const user = await register({
