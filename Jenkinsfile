@@ -3,6 +3,9 @@ pipeline {
 
     stages {
         stage('Build Backend') {
+            when {
+                changeset "backend/**"
+            }
             steps {
                 sh '''
                 cd backend
@@ -13,6 +16,9 @@ pipeline {
         }
 
         stage('Build Frontend') {
+            when {
+                changeset "frontend/**"
+            }
             steps {
                 sh '''
                 cd frontend
@@ -23,6 +29,12 @@ pipeline {
         }
 
         stage('Docker Build') {
+            when {
+                anyOf {
+                    changeset "backend/**"
+                    changeset "frontend/**"
+                }
+            }
             steps {
                 sh '''
                 docker compose build
